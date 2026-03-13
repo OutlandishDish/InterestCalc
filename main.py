@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from calculations import calculate_yield 
 
-def run_calculation():
+def run_calculation(event=None):
     try:
         p = float(entry_balance.get())
         m = float(entry_interest.get())
@@ -37,6 +37,7 @@ entry_days = tk.Entry(root)
 entry_days.insert(0, "30") # Set 30 as a default starting value
 entry_days.pack(pady=5)
 
+root.bind('<Return>', run_calculation)  # Bind Enter key to calculation
 tk.Button(root, text="Calculate", command=run_calculation, bg="#2196F3", fg="white").pack(pady=15)
 
 lbl_res = tk.Label(root, text="Enter details and click Calculate", font=("Arial", 10))
