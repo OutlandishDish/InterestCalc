@@ -43,4 +43,6 @@ tk.Button(root, text="Calculate", command=run_calculation, bg="#2196F3", fg="whi
 lbl_res = tk.Label(root, text="Enter details and click Calculate", font=("Arial", 10))
 lbl_res.pack()
 
+entry_balance.focus_set()
+
 root.mainloop()
