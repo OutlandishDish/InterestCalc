@@ -1,29 +1,45 @@
+import tkinter as tk
+from tkinter import messagebox
+from calculations import calculate_yield 
 
-def calculate_yield(principal, monthly_earned):
-    """
-    Calculates monthly interest rate and extrapolates yearly rate.
-    """
-    # Calculate monthly rate as a decimal
-    monthly_rate = monthly_earned / principal
-    
-    # Simple extrapolation (Annual Percentage Rate - APR)
-    annual_rate = monthly_rate * 12
-    
-    # Compound extrapolation (Annual Percentage Yield - APY)
-    # Formula: ((1 + r)^12) - 1
-    apy_rate = ((1 + monthly_rate) ** 12) - 1
-    
-    return monthly_rate, annual_rate, apy_rate
+def run_calculation():
+    try:
+        p = float(entry_balance.get())
+        m = float(entry_interest.get())
+        d = float(entry_days.get()) # Get the days
+        
+        m_rate, a_rate, apy = calculate_yield(p, m, d)
+        
+        lbl_res.config(text=f"Standard Monthly: {m_rate:.4%}\n"
+                            f"Annual (Simple): {a_rate:.2%}\n"
+                            f"Annual Yield (APY): {apy:.2%}")
+        
+    except ValueError:
+        messagebox.showerror("Input Error", "Please enter valid numbers.")
 
-# --- User Inputs ---
-# Example: $50,000 balance, $210 earned this month
-balance = 25996.95 
-interest_received = 199.05
+root = tk.Tk()
+root.title("Precision Interest Calculator")
+root.geometry("350x300")
 
-m_rate, a_rate, apy = calculate_yield(balance, interest_received)
+# Balance Input
+tk.Label(root, text="Current Balance ($):").pack()
+entry_balance = tk.Entry(root)
+entry_balance.pack(pady=5)
 
-# --- Results ---
-print(f"--- Investment Summary ---")
-print(f"Monthly Interest Rate: {m_rate:.4%}")
-print(f"Annual Rate (Simple):  {a_rate:.2%}")
-print(f"Annual Yield (APY):    {apy:.2%}")
+# Interest Input
+tk.Label(root, text="Interest Earned ($):").pack()
+entry_interest = tk.Entry(root)
+entry_interest.pack(pady=5)
+
+# Days Input
+tk.Label(root, text="Days in this period (e.g., 28 or 31):").pack()
+entry_days = tk.Entry(root)
+entry_days.insert(0, "30") # Set 30 as a default starting value
+entry_days.pack(pady=5)
+
+tk.Button(root, text="Calculate", command=run_calculation, bg="#2196F3", fg="white").pack(pady=15)
+
+lbl_res = tk.Label(root, text="Enter details and click Calculate", font=("Arial", 10))
+lbl_res.pack()
+
+root.mainloop()
