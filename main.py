@@ -1,3 +1,7 @@
+# TODO: Change icon.
+# Review Code for understanding
+# Creat back end to store data, lookiat incorporating it into my budgeting solution.
+
 import tkinter as tk
 from tkinter import messagebox
 from calculations import calculate_yield 
