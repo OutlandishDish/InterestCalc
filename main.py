@@ -4,7 +4,11 @@
 
 import tkinter as tk
 from tkinter import messagebox
-from calculations import calculate_yield 
+import pandas as pd
+from calculations import calculate_yield
+
+# DataFrame to store calculation history
+history_records = []
 
 def update_principal(*args):
     """Calculates: Base Principal = Current Balance - Interest Earned"""
@@ -32,8 +36,22 @@ def run_calculation(event=None):
         
         m_rate, a_rate, apy = calculate_yield(p, m, d)
         
+        # Store result in history list and build DataFrame for analysis
+        history_records.append({
+            "Principal": p,
+            "InterestEarned": m,
+            "Days": d,
+            "MonthlyRate": m_rate,
+            "APY": apy
+        })
+        history_df = pd.DataFrame(history_records)
+        
+        # Display the highest APY seen so far
+        highest_apy = history_df["APY"].max()
+        
         lbl_res.config(text=f"Standard Monthly: {m_rate:.4%}\n"
                             f"Annual Yield (APY): {apy:.2%}", fg="black")
+        lbl_highest.config(text=f"Highest APY on record: {highest_apy:.2%}")
     except ValueError:
         messagebox.showerror("Input Error", "Please enter valid numbers.")
 
@@ -74,6 +92,9 @@ tk.Button(root, text="Calculate", command=run_calculation, bg="#2196F3", fg="whi
 
 lbl_res = tk.Label(root, text="Press Enter to calculate yield", font=("Arial", 10, "italic"))
 lbl_res.pack()
+
+lbl_highest = tk.Label(root, text="Highest APY on record: --", font=("Arial", 10, "bold"), fg="blue")
+lbl_highest.pack(pady=5)
 
 entry_bal.focus_set()
 root.mainloop()
